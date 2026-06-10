@@ -1,0 +1,468 @@
+{
+  "info": {
+    "_postman_id": "8d8247b3-a02f-4bcc-adb4-323c3daade92",
+    "name": "Testing Project",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "49694256",
+    "_collection_link": "https://go.postman.co/collection/49694256-8d8247b3-a02f-4bcc-adb4-323c3daade92?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "login Auth",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let response = pm.response.json();\r",
+              "\r",
+              "pm.environment.set(\r",
+              "  \"token\", response.accessToken\r",
+              ");\r",
+              "\r",
+              "pm.environment.set(\r",
+              "  \"userId\", response.id\r",
+              ");"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"emilys\",\r\n  \"password\": \"emilyspass\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseURL}}/auth/login",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/auth/me",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "auth",
+            "me"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get all products",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/products",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Specific Products",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/products/1",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "products",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Search Produtcs",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Response Time\", function () {\r",
+              "    pm.expect(pm.response.responseTime)\r",
+              "      .to.be.below(1000);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/products/search?q=phone",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "products",
+            "search"
+          ],
+          "query": [
+            {
+              "key": "q",
+              "value": "phone"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add a product",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let data = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Product Exists\", function () {\r",
+              "    pm.expect(data.products.length)\r",
+              "      .to.be.greaterThan(0);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJlbWlseXMiLCJlbWFpbCI6ImVtaWx5LmpvaG5zb25AeC5kdW1teWpzb24uY29tIiwiZmlyc3ROYW1lIjoiRW1pbHkiLCJsYXN0TmFtZSI6IkpvaG5zb24iLCJnZW5kZXIiOiJmZW1hbGUiLCJpbWFnZSI6Imh0dHBzOi8vZHVtbXlqc29uLmNvbS9pY29uL2VtaWx5cy8xMjgiLCJpYXQiOjE3ODEwMzM4NzIsImV4cCI6MTc4MTAzNzQ3Mn0.BW9uzAzRWu564_gDcWfmVDXKAIqhFttyUEFxjvuyv9U",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"title\": \"BMW Pencil\",\r\n  \"description\": \"If you write using this pencil you will get above 30% marks\",\r\n  \"category\": \"Stationary\",\r\n  \"price\": 9.99,\r\n  \"discountPercentage\": 7.17,\r\n  \"rating\": 1.008,\r\n  \"stock\": 5,\r\n  \"tags\": [\r\n    \"beauty\",\r\n    \"mascara\"\r\n  ],\r\n  \"brand\": \"Essence\",\r\n  \"sku\": \"RCH45Q1A\",\r\n  \"weight\": 2,\r\n  \"dimensions\": {\r\n    \"width\": 23.17,\r\n    \"height\": 14.43,\r\n    \"depth\": 28.01\r\n  },\r\n  \"warrantyInformation\": \"1 month warranty\",\r\n  \"shippingInformation\": \"Ships in 1 month\",\r\n  \"availabilityStatus\": \"Low Stock\",\r\n  \"reviews\": [\r\n    {\r\n      \"rating\": 2,\r\n      \"comment\": \"Very unhappy with my purchase!\",\r\n      \"date\": \"2024-05-23T08:56:21.618Z\",\r\n      \"reviewerName\": \"John Doe\",\r\n      \"reviewerEmail\": \"john.doe@x.dummyjson.com\"\r\n    },\r\n    {\r\n      \"rating\": 2,\r\n      \"comment\": \"Not as described!\",\r\n      \"date\": \"2024-05-23T08:56:21.618Z\",\r\n      \"reviewerName\": \"Nolan Gonzalez\",\r\n      \"reviewerEmail\": \"nolan.gonzalez@x.dummyjson.com\"\r\n    },\r\n    {\r\n      \"rating\": 5,\r\n      \"comment\": \"Very satisfied!\",\r\n      \"date\": \"2024-05-23T08:56:21.618Z\",\r\n      \"reviewerName\": \"Scarlett Wright\",\r\n      \"reviewerEmail\": \"scarlett.wright@x.dummyjson.com\"\r\n    }\r\n  ],\r\n  \"returnPolicy\": \"30 days return policy\",\r\n  \"minimumOrderQuantity\": 24,\r\n  \"meta\": {\r\n    \"createdAt\": \"2024-05-23T08:56:21.618Z\",\r\n    \"updatedAt\": \"2024-05-23T08:56:21.618Z\",\r\n    \"barcode\": \"9164035109868\",\r\n    \"qrCode\": \"...\"\r\n  },\r\n  \"thumbnail\": \"...\",\r\n  \"images\": [\"...\", \"...\", \"...\"]\r\n  }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseURL}}/products/add",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "products",
+            "add"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update a product",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let data = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Product Exists\", function () {\r",
+              "    pm.expect(data.products.length)\r",
+              "      .to.be.greaterThan(0);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": " {\r\n    \"title\": \"iPhone Galaxy +1\"\r\n  }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseURL}}/products/1",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "products",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete A Product",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": " {\r\n    \"title\": \"iPhone Galaxy +1\"\r\n  }"
+        },
+        "url": {
+          "raw": "{{baseURL}}/products/1",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "products",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get all cart Products",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/carts",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "carts"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Single Cart Product",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/carts/1",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "carts",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Cart Product by User",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/carts/user/7",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "carts",
+            "user",
+            "7"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add a Cart",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let data = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Product Exists\", function () {\r",
+              "    pm.expect(data.products.length)\r",
+              "      .to.be.greaterThan(0);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"userId\": 1,\r\n  \"products\": [\r\n    {\r\n      \"id\": 11,\r\n      \"quantity\": 101\r\n    }\r\n  ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseURL}}/carts/add",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "carts",
+            "add"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Cart",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"products\": [\r\n    {\r\n      \"id\": 1,\r\n      \"quantity\": 5\r\n    }\r\n  ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseURL}}/carts/1",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "carts",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Remove Cart product",
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"products\": [\r\n    {\r\n      \"id\": 1,\r\n      \"quantity\": 0\r\n    }\r\n  ]\r\n}"
+        },
+        "url": {
+          "raw": "{{baseURL}}/carts/1",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "carts",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Search User",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/users/search?q=john",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "users",
+            "search"
+          ],
+          "query": [
+            {
+              "key": "q",
+              "value": "john"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
